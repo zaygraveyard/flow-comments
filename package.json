@@ -6,6 +6,7 @@
   "bin": {
     "flow-comments": "./bin/flow-comments"
   },
+  "repository": "zaygraveyard/flow-comments",
   "scripts": {
     "test": "./bin/flow-comments add < fixtures/without-comments.js | diff fixtures/with-comments.js - > /dev/null && ./bin/flow-comments remove < fixtures/with-comments.js | diff fixtures/without-comments.js - > /dev/null"
   },
