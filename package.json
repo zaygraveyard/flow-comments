@@ -1,0 +1,28 @@
+{
+  "name": "@ziadkh0/flow-comments",
+  "version": "0.1.0",
+  "description": "A simple CLI that wraps/unwraps flow type annotations in comments",
+  "main": "index.js",
+  "bin": {
+    "flow-comments": "./bin/flow-comments"
+  },
+  "scripts": {
+    "test": "./bin/flow-comments add < fixtures/without-comments.js | diff fixtures/with-comments.js - > /dev/null && ./bin/flow-comments remove < fixtures/with-comments.js | diff fixtures/without-comments.js - > /dev/null"
+  },
+  "keywords": [
+    "flow",
+    "comment",
+    "format",
+    "cli"
+  ],
+  "author": "Ziad EL KHOURY HANNA",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/parser": "^7.5.5",
+    "@babel/traverse": "^7.5.5",
+    "fast-glob": "^3.0.4",
+    "fs-readdir-recursive": "^1.1.0",
+    "magic-string": "^0.25.3",
+    "minimist": "^1.2.0"
+  }
+}
