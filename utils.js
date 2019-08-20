@@ -3,7 +3,7 @@ const fg = require('fast-glob');
 const path = require('path');
 const fs = require('fs');
 
-exports.readStdin = function readStdin() {
+function readStdin() {
   return new Promise(function(resolve, reject) {
     let code = '';
 
@@ -17,8 +17,8 @@ exports.readStdin = function readStdin() {
     });
     process.stdin.on('error', reject);
   });
-};
-exports.readFile = function readFile(filename) {
+}
+function readFile(filename) {
   return new Promise(function(resolve, reject) {
     fs.readFile(filename, 'utf8', function(err, code) {
       if (err) {
@@ -28,8 +28,8 @@ exports.readFile = function readFile(filename) {
       resolve(code);
     });
   });
-};
-exports.writeFile = function writeFile(filename, code) {
+}
+function writeFile(filename, code) {
   return new Promise(function(resolve, reject) {
     fs.writeFile(filename, code, 'utf8', function(err) {
       if (err) {
@@ -39,8 +39,8 @@ exports.writeFile = function writeFile(filename, code) {
       resolve();
     });
   });
-};
-exports.readdir = function readdir(dirname, includeDotfiles, filter) {
+}
+function readdir(dirname, includeDotfiles, filter) {
   return readdirRecursive(dirname, function(
     filename,
     _index,
@@ -54,8 +54,8 @@ exports.readdir = function readdir(dirname, includeDotfiles, filter) {
       (includeDotfiles || filename[0] !== '.') && (!filter || filter(filename))
     );
   });
-};
-exports.walk = async function walk(filenames) {
+}
+async function walk(filenames) {
   const _filenames = [];
   const stream = fg.stream(filenames, {unique: true});
   for await (const filename of stream) {
@@ -73,4 +73,10 @@ exports.walk = async function walk(filenames) {
     }
   }
   return _filenames;
-};
+}
+
+exports.readStdin = readStdin;
+exports.readFile = readFile;
+exports.writeFile = writeFile;
+exports.readdir = readdir;
+exports.walk = walk;
