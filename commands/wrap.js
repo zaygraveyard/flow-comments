@@ -3,7 +3,7 @@ const traverse = require('@babel/traverse').default;
 
 const WHITE_SPACE_REGEX = /\s/;
 
-function addMagicString({source, ast, result}, {spaceBefore, spaceInside} = {}) {
+function wrapMagicString({source, ast, result}, {spaceBefore, spaceInside} = {}) {
   const insideSpace = spaceInside ? ' ' : '';
   traverse(ast, {
     TypeCastExpression(path) {
@@ -154,7 +154,7 @@ function addMagicString({source, ast, result}, {spaceBefore, spaceInside} = {}) 
 
 module.exports = function({source, ast}, options = {}) {
   const result = new MagicString(source);
-  addMagicString({source, ast, result}, options);
+  wrapMagicString({source, ast, result}, options);
   return result.toString();
 };
-module.exports.addMagicString = addMagicString;
+module.exports.wrapMagicString = wrapMagicString;

@@ -8,7 +8,7 @@ export { fooE } from 'foo';
 /*::import typeof EI, { FI, GI } from './types';*/
 
 import A1, { B1/*::, type C1, type D1*/, E1 } from './types';
-import F1, { /*::typeof G1,*/ H1/*::, type I1*/ } from './types';
+import F1, { /*::typeof G1, */H1/*::, type I1*/ } from './types';
 import { /*::type J1*/ } from './types';
 import K1, { L1, M1 } from './types';
 import './types';
