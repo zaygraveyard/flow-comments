@@ -1,6 +1,6 @@
 {
   "name": "@ziadkh0/flow-comments",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A simple CLI that wraps/unwraps flow type annotations in comments",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
