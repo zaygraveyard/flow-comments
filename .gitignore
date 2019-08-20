@@ -10,3 +10,9 @@ yarn-error.log*
 
 # Dependency directories
 node_modules/
+
+# OS specific
+.DS_Store
+
+# Generated files
+dist

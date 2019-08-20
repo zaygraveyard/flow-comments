@@ -1,16 +1,19 @@
-const readdirRecursive = require('fs-readdir-recursive');
-const fg = require('fast-glob');
-const path = require('path');
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
+import readdirRecursive from 'fs-readdir-recursive';
+import fg from 'fast-glob';
 
-function readStdin() {
+export function readStdin() {
   return new Promise(function(resolve, reject) {
     let code = '';
 
     process.stdin.setEncoding('utf8');
     process.stdin.on('readable', function() {
       const chunk = process.stdin.read();
-      if (chunk !== null) code += chunk;
+
+      if (chunk !== null) {
+        code += chunk;
+      }
     });
     process.stdin.on('end', function() {
       resolve(code);
@@ -18,7 +21,7 @@ function readStdin() {
     process.stdin.on('error', reject);
   });
 }
-function readFile(filename) {
+export function readFile(filename) {
   return new Promise(function(resolve, reject) {
     fs.readFile(filename, 'utf8', function(err, code) {
       if (err) {
@@ -29,7 +32,7 @@ function readFile(filename) {
     });
   });
 }
-function writeFile(filename, code) {
+export function writeFile(filename, code) {
   return new Promise(function(resolve, reject) {
     fs.writeFile(filename, code, 'utf8', function(err) {
       if (err) {
@@ -40,43 +43,43 @@ function writeFile(filename, code) {
     });
   });
 }
-function readdir(dirname, includeDotfiles, filter) {
+export function readdir(dirname, includeDotfiles, filter) {
   return readdirRecursive(dirname, function(
     filename,
     _index,
-    currentDirectory
+    currentDirectory,
   ) {
     const stat = fs.statSync(path.join(currentDirectory, filename));
 
-    if (stat.isDirectory()) return true;
+    if (stat.isDirectory()) {
+      return true;
+    }
 
     return (
       (includeDotfiles || filename[0] !== '.') && (!filter || filter(filename))
     );
   });
 }
-async function walk(filenames) {
-  const _filenames = [];
-  const stream = fg.stream(filenames, {unique: true});
-  for await (const filename of stream) {
-    if (!fs.existsSync(filename)) return;
+export async function walk(globs) {
+  const filepaths = [];
+  const stream = fg.stream(globs, { unique: true });
 
-    const stat = fs.statSync(filename);
+  for await (const filepath of stream) {
+    if (!fs.existsSync(filepath)) {
+      continue;
+    }
+
+    const stat = fs.statSync(filepath);
+
     if (stat.isDirectory()) {
-      const dirname = filename;
+      const dirname = filepath;
 
-      readdir(filename).forEach(function(filename) {
-        _filenames.push(path.join(dirname, filename));
+      readdir(filepath).forEach(function(filename) {
+        filepaths.push(path.join(dirname, filename));
       });
     } else {
-      _filenames.push(filename);
+      filepaths.push(filepath);
     }
   }
-  return _filenames;
+  return filepaths;
 }
-
-exports.readStdin = readStdin;
-exports.readFile = readFile;
-exports.writeFile = writeFile;
-exports.readdir = readdir;
-exports.walk = walk;

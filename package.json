@@ -2,18 +2,33 @@
   "name": "@ziadkh0/flow-comments",
   "version": "0.2.1",
   "description": "A simple CLI that wraps/unwraps flow type annotations in comments",
-  "main": "index.js",
-  "bin": {
-    "flow-comments": "./bin/flow-comments"
-  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "bin": "dist/cli.js",
   "repository": "zaygraveyard/flow-comments",
   "scripts": {
-    "test": "(npm run -s test:wrap && npm run -s test:unwrap && npm run -s test:remove && npm run -s test:files) || (npm run -s finallytest; false)",
-    "test:wrap": "./bin/flow-comments wrap < fixtures/unwrapped.js | diff fixtures/wrapped.js - > /dev/null",
-    "test:unwrap": "./bin/flow-comments unwrap < fixtures/wrapped.js | diff fixtures/unwrapped.js - > /dev/null",
-    "test:remove": "./bin/flow-comments remove < fixtures/wrapped.js | diff fixtures/wrapped-removed.js - > /dev/null && ./bin/flow-comments remove < fixtures/unwrapped.js | diff fixtures/unwrapped-removed.js - > /dev/null",
-    "test:files": "cp fixtures/wrapped.js fixtures/temp_1.js && cp fixtures/wrapped.js fixtures/temp_2.js && ./bin/flow-comments unwrap 'fixtures/temp_*.js' && diff --to-file=fixtures/unwrapped.js fixtures/temp_*.js > /dev/null",
-    "finallytest": "rm -rf fixtures/temp_*.js"
+    "build": "npm run -s build:main && npm run -s build:commands && chmod +x dist/cli.js",
+    "build:main": "microbundle src/{cli,index}.js -f es,cjs --target node --no-compress --no-sourcemap",
+    "build:commands": "microbundle src/commands/*.js -f cjs -o dist/commands --target node --no-compress --no-sourcemap",
+    "prepare": "npm run -s build",
+    "lint": "eslint src",
+    "pretest": "npm run -s lint && npm run -s build",
+    "test": "(npm run -s test:wrap && npm run -s test:unwrap && npm run -s test:remove && npm run -s test:files && npm run -s finallytest) || (npm run -s finallytest; false)",
+    "test:wrap": "dist/cli.js wrap < test/fixtures/unwrapped.js | diff test/fixtures/wrapped.js - > /dev/null",
+    "test:unwrap": "dist/cli.js unwrap < test/fixtures/wrapped.js | diff test/fixtures/unwrapped.js - > /dev/null",
+    "test:remove": "dist/cli.js remove < test/fixtures/wrapped.js | diff test/fixtures/wrapped-removed.js - > /dev/null && dist/cli.js remove < test/fixtures/unwrapped.js | diff test/fixtures/unwrapped-removed.js - > /dev/null",
+    "test:files": "cp test/fixtures/wrapped.js test/fixtures/temp_1.js && cp test/fixtures/wrapped.js test/fixtures/temp_2.js && dist/cli.js unwrap 'test/fixtures/temp_*.js' && diff --to-file=test/fixtures/unwrapped.js test/fixtures/temp_*.js > /dev/null",
+    "finallytest": "rm -rf test/fixtures/temp_*.js",
+    "preversion": "npm test",
+    "prepublishOnly": "npm test && git push && git push --tags"
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all"
   },
   "keywords": [
     "flow",
@@ -30,5 +45,15 @@
     "fs-readdir-recursive": "^1.1.0",
     "magic-string": "^0.25.3",
     "minimist": "^1.2.0"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.5.5",
+    "@getify/eslint-plugin-proper-arrows": "^8.0.1",
+    "eslint": "^6.2.1",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "microbundle": "^0.11.0",
+    "prettier": "^1.18.2"
   }
 }

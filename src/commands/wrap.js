@@ -1,10 +1,14 @@
-const MagicString = require('magic-string').default;
-const traverse = require('@babel/traverse').default;
+import MagicString from 'magic-string';
+import traverse from '@babel/traverse';
 
 const WHITE_SPACE_REGEX = /\s/;
 
-function wrapMagicString({source, ast, result}, {spaceBefore, spaceInside} = {}) {
+export function wrapMagicString(
+  { source, ast, result },
+  { spaceBefore, spaceInside } = {},
+) {
   const insideSpace = spaceInside ? ' ' : '';
+
   traverse(ast, {
     TypeCastExpression(path) {
       wrapPathInFlowComment(path.get('typeAnnotation'));
@@ -13,15 +17,18 @@ function wrapMagicString({source, ast, result}, {spaceBefore, spaceInside} = {})
 
     // support function a(b?) {}
     Identifier(path) {
-      const {node} = path;
+      const { node } = path;
+
       if (node.typeAnnotation) {
         const start = node.optional
           ? getStartOfToken(node, '?')
           : node.typeAnnotation.start;
+
         wrapInFlowComment(start, node.typeAnnotation.end);
         path.get('typeAnnotation').remove();
       } else if (node.optional) {
         const start = getStartOfToken(node, '?');
+
         wrapInFlowComment(start, start + 1);
       }
     },
@@ -36,17 +43,22 @@ function wrapMagicString({source, ast, result}, {spaceBefore, spaceInside} = {})
 
     // support `import type A` and `import typeof A`
     ImportDeclaration(path) {
-      const {node} = path;
-      if (isTypeImportNode(node) || node.specifiers.length === 0) return;
+      const { node } = path;
+
+      if (isTypeImportNode(node) || node.specifiers.length === 0) {
+        return;
+      }
       const specifiers = node.specifiers;
       const indexOfFirstNonDefaultSpecifier =
         specifiers[0].type === 'ImportDefaultSpecifier' ? 1 : 0;
       let start = NaN;
       let end;
-      for (let [index, specifier] of specifiers.entries()) {
+
+      specifiers.forEach(function(specifier, index) {
         if (isTypeImportNode(specifier)) {
           const isFirst = index === indexOfFirstNonDefaultSpecifier;
           const isLast = index === specifiers.length - 1;
+
           if (isNaN(start)) {
             start = isFirst
               ? specifier.start
@@ -60,7 +72,7 @@ function wrapMagicString({source, ast, result}, {spaceBefore, spaceInside} = {})
           wrapInFlowComment(start, end);
           start = NaN;
         }
-      }
+      });
       if (!isNaN(start)) {
         wrapInFlowComment(start, end);
       }
@@ -74,7 +86,8 @@ function wrapMagicString({source, ast, result}, {spaceBefore, spaceInside} = {})
     },
 
     Class(path) {
-      const {node} = path;
+      const { node } = path;
+
       if (!node.implements) {
         return;
       }
@@ -93,18 +106,11 @@ function wrapMagicString({source, ast, result}, {spaceBefore, spaceInside} = {})
       }
 
       wrapInFlowComment(start, end);
-      delete node['implements'];
+      delete node.implements;
     },
   });
 
-  return {source, ast, result};
-
-  function getSource(node) {
-    if (node.end) {
-      return source.slice(node.start, node.end);
-    }
-    return '';
-  }
+  return { source, ast, result };
 
   function getStartOfToken(node, token, defaultValue = -1) {
     const endOfTrailingComments =
@@ -114,6 +120,7 @@ function wrapMagicString({source, ast, result}, {spaceBefore, spaceInside} = {})
         ? node.start + node.name.length
         : node.end;
     const start = source.indexOf(token, endOfTrailingComments);
+
     return start === -1 ? defaultValue : start;
   }
   function getStartOfNode(node) {
@@ -127,20 +134,26 @@ function wrapMagicString({source, ast, result}, {spaceBefore, spaceInside} = {})
       .slice(start, end)
       .replace(/\*-\//g, '*-ESCAPED/')
       .replace(/\*\//g, '*-/');
-    if (optional) comment = '?' + comment;
-    if (comment[0] !== ':') comment = '::' + insideSpace + comment;
+
+    if (optional) {
+      comment = `?${comment}`;
+    }
+    if (comment[0] !== ':') {
+      comment = `::${insideSpace}${comment}`;
+    }
     return `/*${comment}${insideSpace}*/`;
   }
   function wrapInFlowComment(start, end, optional) {
     const addSpace =
       spaceBefore && start > 0 && !WHITE_SPACE_REGEX.test(source[start - 1]);
+
     result.overwrite(
       start,
       end,
-      (addSpace ? ' ' : '') + generateComment(start, end, optional)
+      (addSpace ? ' ' : '') + generateComment(start, end, optional),
     );
   }
-  function wrapPathInFlowComment({node: {start, end}}, optional) {
+  function wrapPathInFlowComment({ node: { start, end } }, optional) {
     wrapInFlowComment(start, end, optional);
   }
 
@@ -152,9 +165,9 @@ function wrapMagicString({source, ast, result}, {spaceBefore, spaceInside} = {})
   }
 }
 
-module.exports = function({source, ast}, options = {}) {
+export default function({ source, ast }, options = {}) {
   const result = new MagicString(source);
-  wrapMagicString({source, ast, result}, options);
+
+  wrapMagicString({ source, ast, result }, options);
   return result.toString();
-};
-module.exports.wrapMagicString = wrapMagicString;
+}

@@ -1,6 +1,6 @@
-const {parse} = require('@babel/parser');
+import { parse } from '@babel/parser';
 
-module.exports = function parseCode(source) {
+export default function parseCode(source) {
   return {
     source,
     ast: parse(source, {
@@ -8,4 +8,4 @@ module.exports = function parseCode(source) {
       plugins: ['classProperties', 'flow', 'jsx'],
     }),
   };
-};
+}
