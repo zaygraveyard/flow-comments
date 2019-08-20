@@ -8,9 +8,10 @@
   },
   "repository": "zaygraveyard/flow-comments",
   "scripts": {
-    "test": "npm run test:wrap && npm run test:unwrap",
+    "test": "npm run test:wrap && npm run test:unwrap && npm run test:remove",
     "test:wrap": "./bin/flow-comments wrap < fixtures/unwrapped.js | diff fixtures/wrapped.js - > /dev/null",
-    "test:unwrap": "./bin/flow-comments unwrap < fixtures/wrapped.js | diff fixtures/unwrapped.js - > /dev/null"
+    "test:unwrap": "./bin/flow-comments unwrap < fixtures/wrapped.js | diff fixtures/unwrapped.js - > /dev/null",
+    "test:remove": "./bin/flow-comments remove < fixtures/wrapped.js | diff fixtures/wrapped-removed.js - > /dev/null && ./bin/flow-comments remove < fixtures/unwrapped.js | diff fixtures/unwrapped-removed.js - > /dev/null"
   },
   "keywords": [
     "flow",

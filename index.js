@@ -22,6 +22,7 @@ const {_: filenames, ...options} = minimist(process.argv.slice(3), {
 switch (command) {
 case 'wrap':
 case 'unwrap':
+case 'remove':
   options.command = command;
   break;
 default:
@@ -29,7 +30,7 @@ default:
 }
 
 if (options.h || !options.command) {
-  console.error(`flow-comments (wrap|unwrap) [-h|--help] [--spaceBefore] [--spaceInside] [files...]`);
+  console.error(`flow-comments (wrap|unwrap|remove) [-h|--help] [--spaceBefore] [--spaceInside] [files...]`);
   process.exit(1);
 }
 
