@@ -305,7 +305,7 @@ module.exports = {
     'sort-keys': 'off',
     'sort-vars': 'off',
     'space-before-blocks': ['error', 'always'],
-    'space-before-function-paren': ['error', 'never'],
+    'space-before-function-paren': 'off',
     'space-in-parens': ['error', 'never'],
     'space-infix-ops': ['error', {int32Hint: true}],
     'space-unary-ops': ['error', {words: true, nonwords: false}],
