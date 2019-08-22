@@ -6,6 +6,7 @@ export function toHTMMagicString(
   { source, ast, result },
   { tag = 'html', import: importOption = false } = {},
 ) {
+  const tagRoot = tag.split('.')[0];
   const importDeclaration = tagImport(importOption);
   const FRAGMENT_EXPR = dottedIdentifier('React.Fragment');
   let foundJSXElement = false;
@@ -14,7 +15,11 @@ export function toHTMMagicString(
   traverse(ast, {
     Program: {
       exit(path) {
-        if (foundJSXElement && importDeclaration) {
+        if (
+          foundJSXElement &&
+          importDeclaration &&
+          !path.scope.hasBinding(tagRoot)
+        ) {
           let start = path.node.start;
 
           if (t.isImportDeclaration(path.node.body[0])) {
@@ -35,7 +40,6 @@ export function toHTMMagicString(
     if (imp === false) {
       return null;
     }
-    const tagRoot = tag.split('.')[0];
     const { module, export: export_ } =
       typeof imp === 'string'
         ? {

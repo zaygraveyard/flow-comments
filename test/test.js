@@ -128,6 +128,14 @@ describe('to-htm', () => {
         '/**/\nimport {html} from "htm/preact";\nimport Foo from "foo";\n(html`<div />`);',
       );
     });
+
+    test('no import if already in scope', () => {
+      expect(
+        compile('import html from "foo";\n(<div />);', {
+          import: 'htm/preact',
+        }),
+      ).toBe('import html from "foo";\n(html`<div />`);');
+    });
   });
 
   describe('elements and text', () => {
