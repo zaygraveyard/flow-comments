@@ -15,6 +15,7 @@ switch (command) {
   case 'wrap':
   case 'unwrap':
   case 'remove':
+  case 'to-htm':
     options.command = command;
     break;
   default:
@@ -23,7 +24,7 @@ switch (command) {
 
 if (options.h || !options.command) {
   console.error(
-    'flow-comments (wrap|unwrap|remove) [-h|--help] [--spaceBefore] [--spaceInside] [files...]',
+    'flow-comments (wrap|unwrap|remove|to-htm) [-h|--help] [--spaceBefore] [--spaceInside] [files...]',
   );
   //eslint-disable-next-line no-process-exit
   process.exit(1);
