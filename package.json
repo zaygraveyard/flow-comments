@@ -2,32 +2,32 @@
   "name": "@ziadkh0/flow-comments",
   "version": "0.3.1",
   "description": "A simple CLI that wraps/unwraps flow type annotations in comments",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "bin": "dist/cli.js",
+  "main": "src/index.js",
+  "module": "src/main.js",
+  "bin": "src/cli.js",
   "repository": "zaygraveyard/flow-comments",
   "scripts": {
-    "build": "npm run -s build:main && npm run -s build:commands && chmod +x dist/cli.js",
-    "build:main": "microbundle src/{cli,index}.js -f es,cjs --target node --no-compress --no-sourcemap",
-    "build:commands": "microbundle src/commands/*.js -f cjs -o dist/commands --target node --no-compress --no-sourcemap",
-    "prepare": "npm run -s build",
     "lint": "eslint src test",
     "fmt": "eslint src test --fix",
-    "pretest": "npm run -s lint && npm run -s build",
-    "test": "(npm run -s test:jest && npm run -s test:cli && npm run -s finallytest) || (npm run -s finallytest; false)",
-    "test:jest": "jest",
-    "test:cli": "cp test/fixtures/wrapped.js test/fixtures/temp_1.js && cp test/fixtures/wrapped.js test/fixtures/temp_2.js && dist/cli.js unwrap 'test/fixtures/temp_*.js' && diff --to-file=test/fixtures/unwrapped.js test/fixtures/temp_*.js > /dev/null",
+    "pretest": "npm run -s lint",
+    "test": "(npm run -s test:ava && npm run -s test:cli && npm run -s finallytest) || (npm run -s finallytest; false)",
+    "test:ava": "ava test/*.js",
+    "test:cli": "cp test/fixtures/wrapped.js test/fixtures/temp_1.js && cp test/fixtures/wrapped.js test/fixtures/temp_2.js && src/cli.js unwrap 'test/fixtures/temp_*.js' && diff --to-file=test/fixtures/unwrapped.js test/fixtures/temp_*.js > /dev/null",
     "finallytest": "rm -rf test/fixtures/temp_*.js",
     "preversion": "npm test",
     "prepublishOnly": "npm test && git push && git push --tags"
   },
   "files": [
-    "src",
-    "dist"
+    "src"
   ],
   "prettier": {
     "singleQuote": true,
     "trailingComma": "all"
+  },
+  "ava": {
+    "require": [
+      "esm"
+    ]
   },
   "keywords": [
     "flow",
@@ -40,21 +40,20 @@
   "dependencies": {
     "@babel/parser": "^7.5.5",
     "@babel/traverse": "^7.5.5",
+    "@babel/types": "^7.5.5",
     "fast-glob": "^3.0.4",
     "fs-readdir-recursive": "^1.1.0",
     "magic-string": "^0.25.3",
     "minimist": "^1.2.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.5.5",
-    "@babel/types": "^7.5.5",
     "@getify/eslint-plugin-proper-arrows": "^8.0.1",
-    "eslint": "^6.2.1",
+    "ava": "^2.3.0",
+    "eslint": "^6.2.2",
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.0",
-    "jest": "^24.9.0",
-    "microbundle": "^0.11.0",
+    "esm": "^3.2.25",
     "prettier": "^1.18.2"
   }
 }

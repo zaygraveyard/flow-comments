@@ -1,7 +1,7 @@
 import MagicString from 'magic-string';
 import traverse from '@babel/traverse';
-import parse from '../parse';
-import unwrap from './unwrap';
+import parse from '../parse.js';
+import unwrap from './unwrap.js';
 
 const WHITE_SPACE_REGEX = /\s/;
 const NEW_LINE_AT_START_REGEX = /^(\n|\r|(\n\r)|(\r\n))/g;

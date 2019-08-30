@@ -1,6 +1,6 @@
 import MagicString from 'magic-string';
 import traverse from '@babel/traverse';
-import t from '@babel/types';
+import * as t from '@babel/types';
 
 export function toHTMMagicString(
   { source, ast, result },
