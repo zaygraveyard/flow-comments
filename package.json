@@ -11,7 +11,7 @@
     "fmt": "eslint src test --fix",
     "pretest": "npm run -s lint",
     "test": "(npm run -s test:ava && npm run -s test:cli && npm run -s finallytest) || (npm run -s finallytest; false)",
-    "test:ava": "ava test/*.js",
+    "test:ava": "ava",
     "test:cli": "cp test/fixtures/wrapped.js test/fixtures/temp_1.js && cp test/fixtures/wrapped.js test/fixtures/temp_2.js && src/cli.js unwrap 'test/fixtures/temp_*.js' && diff --to-file=test/fixtures/unwrapped.js test/fixtures/temp_*.js > /dev/null",
     "finallytest": "rm -rf test/fixtures/temp_*.js",
     "preversion": "npm test",
@@ -25,6 +25,13 @@
     "trailingComma": "all"
   },
   "ava": {
+    "files": [
+      "test/**/*",
+      "!test/fixtures"
+    ],
+    "sources": [
+      "src/**/*"
+    ],
     "require": [
       "esm"
     ]
