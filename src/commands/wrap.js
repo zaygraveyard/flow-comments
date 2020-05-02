@@ -60,14 +60,12 @@ export function wrapMagicString(
           const isLast = index === specifiers.length - 1;
 
           if (isNaN(start)) {
-            start = isFirst
-              ? specifier.start
-              : getStartOfToken(specifiers[index - 1], ',');
+            start =
+              isFirst || !isLast
+                ? specifier.start
+                : getStartOfToken(specifiers[index - 1], ',');
           }
-          end =
-            isFirst && !isLast
-              ? getStartOfNode(specifiers[index + 1])
-              : specifier.end;
+          end = isLast ? specifier.end : getStartOfNode(specifiers[index + 1]);
         } else if (!isNaN(start)) {
           wrapInFlowComment(start, end);
           start = NaN;

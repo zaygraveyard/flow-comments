@@ -1,3 +1,5 @@
+import { CX } from './types';
+
 import lib from 'library';
 export { fooE } from 'foo';
 
