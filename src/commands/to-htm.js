@@ -186,7 +186,7 @@ export function toHTMMagicString(
     result.appendRight(path.node.start, `${tag}\``);
     result.appendLeft(path.node.end, '`');
     path.replaceWithMultiple(
-      remainingExpressions.map(function(expression) {
+      remainingExpressions.map(function (expression) {
         return t.expressionStatement(expression);
       }),
     );
@@ -195,7 +195,7 @@ export function toHTMMagicString(
   }
 }
 
-export default function({ source, ast }, options = {}) {
+export default function ({ source, ast }, options = {}) {
   const result = new MagicString(source);
 
   toHTMMagicString({ source, ast, result }, options);

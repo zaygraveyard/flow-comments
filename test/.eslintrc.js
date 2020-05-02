@@ -7,5 +7,6 @@ module.exports = {
     '@getify/proper-arrows/params': 'off',
     '@getify/proper-arrows/name': 'off',
     '@getify/proper-arrows/this': 'off',
+    '@getify/proper-arrows/where': 'off',
   },
 };

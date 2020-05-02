@@ -67,7 +67,7 @@ export function removeMagicString({ source, ast, result }, options = {}) {
       let start = NaN;
       let end;
 
-      specifiers.forEach(function(specifier, index) {
+      specifiers.forEach(function (specifier, index) {
         if (isTypeImportNode(specifier)) {
           const isFirst = index === indexOfFirstNonDefaultSpecifier;
           const isLast = index === specifiers.length - 1;
@@ -172,7 +172,7 @@ export function removeMagicString({ source, ast, result }, options = {}) {
   }
 }
 
-export default function({ source, ast }, options = {}) {
+export default function ({ source, ast }, options = {}) {
   let result = new MagicString(source);
 
   result = removeMagicString({ source, ast, result }, options).result;

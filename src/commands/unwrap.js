@@ -29,7 +29,7 @@ export function unwrapMagicString(
   return { source, ast, result };
 }
 
-export default function({ source, ast }, options = {}) {
+export default function ({ source, ast }, options = {}) {
   const result = new MagicString(source);
 
   unwrapMagicString({ source, ast, result }, options);

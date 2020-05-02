@@ -4,26 +4,26 @@ import readdirRecursive from 'fs-readdir-recursive';
 import fg from 'fast-glob';
 
 export function readStdin() {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     let code = '';
 
     process.stdin.setEncoding('utf8');
-    process.stdin.on('readable', function() {
+    process.stdin.on('readable', function () {
       const chunk = process.stdin.read();
 
       if (chunk !== null) {
         code += chunk;
       }
     });
-    process.stdin.on('end', function() {
+    process.stdin.on('end', function () {
       resolve(code);
     });
     process.stdin.on('error', reject);
   });
 }
 export function readFile(filename) {
-  return new Promise(function(resolve, reject) {
-    fs.readFile(filename, 'utf8', function(err, code) {
+  return new Promise(function (resolve, reject) {
+    fs.readFile(filename, 'utf8', function (err, code) {
       if (err) {
         reject(err);
         return;
@@ -33,8 +33,8 @@ export function readFile(filename) {
   });
 }
 export function writeFile(filename, code) {
-  return new Promise(function(resolve, reject) {
-    fs.writeFile(filename, code, 'utf8', function(err) {
+  return new Promise(function (resolve, reject) {
+    fs.writeFile(filename, code, 'utf8', function (err) {
       if (err) {
         reject(err);
         return;
@@ -44,7 +44,7 @@ export function writeFile(filename, code) {
   });
 }
 export function readdir(dirname, includeDotfiles, filter) {
-  return readdirRecursive(dirname, function(
+  return readdirRecursive(dirname, function (
     filename,
     _index,
     currentDirectory,
@@ -74,7 +74,7 @@ export async function walk(globs) {
     if (stat.isDirectory()) {
       const dirname = filepath;
 
-      readdir(filepath).forEach(function(filename) {
+      readdir(filepath).forEach(function (filename) {
         filepaths.push(path.join(dirname, filename));
       });
     } else {

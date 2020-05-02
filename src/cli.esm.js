@@ -2,7 +2,7 @@
 
 import minimist from 'minimist';
 import { writeFile, walk } from './utils.js';
-import { processFile, processStdin } from '.';
+import { processFile, processStdin } from './index.js';
 
 const command = process.argv[2];
 const { _: filenames, ...options } = minimist(process.argv.slice(3), {
@@ -31,8 +31,8 @@ if (options.h || !options.command) {
 }
 
 if (filenames.length > 0) {
-  walk(filenames).then(function(files) {
-    files.map(async function(filename) {
+  walk(filenames).then(function (files) {
+    files.map(async function (filename) {
       try {
         const result = await processFile(filename, options);
 
@@ -44,10 +44,10 @@ if (filenames.length > 0) {
   });
 } else {
   processStdin(options)
-    .then(function(result) {
+    .then(function (result) {
       process.stdout.write(result);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.error(error);
       //eslint-disable-next-line no-process-exit
       process.exit(1);

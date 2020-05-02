@@ -3,8 +3,8 @@ import test from 'ava';
 import { processSource } from '../src/main.js';
 
 function readFile(filename) {
-  return new Promise(function(resolve, reject) {
-    fs.readFile(filename, 'utf8', function(err, code) {
+  return new Promise(function (resolve, reject) {
+    fs.readFile(filename, 'utf8', function (err, code) {
       if (err) {
         reject(err);
         return;
@@ -14,14 +14,14 @@ function readFile(filename) {
   });
 }
 
-test('string', async t => {
+test('string', async (t) => {
   t.is(
     await processSource('const a: string = 2', { command: 'wrap' }),
     'const a/*: string*/ = 2',
   );
 });
 
-test('file', async t => {
+test('file', async (t) => {
   const unwrappedSource = await readFile(`${__dirname}/fixtures/unwrapped.js`);
   const wrappedSource = await readFile(`${__dirname}/fixtures/wrapped.js`);
 

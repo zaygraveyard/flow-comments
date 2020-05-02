@@ -55,10 +55,10 @@ class Foo6/*::<T>*/ {}
 /*::declare class A { static [ indexer: number]: string }*/
 /*::declare class A { static () : number }*/
 /*::declare class A mixins B<T>, C {}*/
-/*::declare type A = string*/
+/*::declare type A0 = string*/
 /*::declare type T<U> = { [k:string]: U }*/
 /*::declare interface I { foo: string }*/
-/*::declare interface I<T> { foo: T }*/
+/*::declare interface I0<T> { foo: T }*/
 function foo_0(numVal/*::?*/) {}
 function foo_1(numVal/*::?*/ = 2) {}
 function foo_2(numVal/*: number*/) {}
@@ -76,7 +76,7 @@ function f/*::<+T2, -U>*/() {}
     column: number
   }>
 };*/
-/*::export interface foo { p: number }*/
+/*::export interface foo0 { p: number }*/
 /*::export interface foo2<T> { p: T }*/
 function add({ a, b }/*: {a: number, b: number}*/)/*: number*/ {
   return a + b;
@@ -104,8 +104,8 @@ function a2() {}
   & ((x: number) => string)
 ;*/
 function multiply(num/*::?: number*/) {}
-function foo(bar/*::?*/) {}
-function foo2(bar/*::?: string*/) {}
+function foo$(bar/*::?*/) {}
+function foo$2(bar/*::?: string*/) {}
 /**/
 /*::type Fooz = number;*/
 /*a*/

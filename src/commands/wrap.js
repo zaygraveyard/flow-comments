@@ -54,7 +54,7 @@ export function wrapMagicString(
       let start = NaN;
       let end;
 
-      specifiers.forEach(function(specifier, index) {
+      specifiers.forEach(function (specifier, index) {
         if (isTypeImportNode(specifier)) {
           const isFirst = index === indexOfFirstNonDefaultSpecifier;
           const isLast = index === specifiers.length - 1;
@@ -165,7 +165,7 @@ export function wrapMagicString(
   }
 }
 
-export default function({ source, ast }, options = {}) {
+export default function ({ source, ast }, options = {}) {
   const result = new MagicString(source);
 
   wrapMagicString({ source, ast, result }, options);

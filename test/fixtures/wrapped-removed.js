@@ -59,8 +59,8 @@ function a2() {}
 
 
 function multiply(num) {}
-function foo(bar) {}
-function foo2(bar) {}
+function foo$(bar) {}
+function foo$2(bar) {}
 /**/
 /*a*/
 /*b*/
