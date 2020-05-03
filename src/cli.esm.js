@@ -1,13 +1,21 @@
 #!/usr/bin/env node
 
+import fs from 'fs';
 import minimist from 'minimist';
 import { writeFile, walk } from './utils.js';
 import { processFile, processStdin } from './index.js';
+
+function getVersion() {
+  return JSON.parse(
+    fs.readFileSync(`${__dirname}/../package.json`, { encoding: 'utf8' }),
+  ).version;
+}
 
 const command = process.argv[2];
 const { _: filenames, ...options } = minimist(process.argv.slice(3), {
   alias: {
     h: 'help',
+    v: 'version',
   },
 });
 
@@ -22,6 +30,11 @@ switch (command) {
     options.command = null;
 }
 
+if (options.v) {
+  console.error(`v${getVersion()}`);
+  //eslint-disable-next-line no-process-exit
+  process.exit(1);
+}
 if (options.h || !options.command) {
   console.error(
     'flow-comments (wrap|unwrap|remove|to-htm) [-h|--help] [--spaceBefore] [--spaceInside] [files...]',
