@@ -30,14 +30,51 @@ switch (command) {
     options.command = null;
 }
 
+if (!options.command) {
+  console.error(
+    'Usage: flow-comments (wrap|unwrap|remove|to-htm) [options] [files...]',
+  );
+  //eslint-disable-next-line no-process-exit
+  process.exit(1);
+}
 if (options.v) {
   console.error(`v${getVersion()}`);
   //eslint-disable-next-line no-process-exit
   process.exit(1);
 }
-if (options.h || !options.command) {
+if (options.h) {
   console.error(
-    'flow-comments (wrap|unwrap|remove|to-htm) [-h|--help] [--spaceBefore] [--spaceInside] [files...]',
+    [
+      'Usage: flow-comments (wrap|unwrap|remove|to-htm) [options] [files...]',
+      '',
+      'Options:',
+      '  -h, --help       Print this screen and exit with status 1.',
+      '  -v, --version    Print version and exit with status 1.',
+      '',
+      'wrap: Wrap flow type annotations in comments.',
+      '  --[no-]spaceBefore   If set, adds a space before the start of the added comment.',
+      '  --[no-]spaceInside   If set, adds a space arround the type inside the comment.',
+      '',
+      'unwrap: Unwrap flow comments type annotations.',
+      '  --[no-]spaceInside   If set, removes a space from the end of the comment.',
+      '',
+      'remove: Strip flow type annotations (including in comment form).',
+      '  --[no-]spaceInside   If set, removes a space from the end of the comment ones.',
+      '',
+      'to-htm: Converts JSX into Tagged Templates that work with htm (like [1]).',
+      '  --tag=TAG          Sets the "tag" function to prefix [Tagged Templates] with. Default: "html"',
+      '',
+      '  Auto-import the tag (off by default):',
+      '  --no-import        Turn off auto-import.',
+      '  --import=MODULE    Auto-import the "tag" function from MODULE (`import {TAG} from MODULE`).',
+      '  --import.module=MODULE --import.export=EXPORT',
+      '                     Auto-import the "tag" function from MODULE:',
+      '                     if EXPORT == "default", `import TAG from MODULE`',
+      '                     if EXPORT == "*", `import * as TAG from MODULE`',
+      '                     otherwise, `import {EXPORT as TAG} from MODULE`',
+      '',
+      '[1]: https://github.com/developit/htm/tree/master/packages/babel-plugin-transform-jsx-to-htm',
+    ].join('\n'),
   );
   //eslint-disable-next-line no-process-exit
   process.exit(1);
