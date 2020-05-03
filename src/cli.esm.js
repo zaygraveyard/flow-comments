@@ -11,8 +11,10 @@ function getVersion() {
   ).version;
 }
 
-const command = process.argv[2];
-const { _: filenames, ...options } = minimist(process.argv.slice(3), {
+const {
+  _: [command, ...filenames],
+  ...options
+} = minimist(process.argv.slice(2), {
   alias: {
     h: 'help',
     v: 'version',
@@ -30,13 +32,6 @@ switch (command) {
     options.command = null;
 }
 
-if (!options.command) {
-  console.error(
-    'Usage: flow-comments (wrap|unwrap|remove|to-htm) [options] [files...]',
-  );
-  //eslint-disable-next-line no-process-exit
-  process.exit(1);
-}
 if (options.v) {
   console.error(`v${getVersion()}`);
   //eslint-disable-next-line no-process-exit
@@ -45,9 +40,8 @@ if (options.v) {
 if (options.h) {
   console.error(
     [
-      'Usage: flow-comments (wrap|unwrap|remove|to-htm) [options] [files...]',
+      'Usage: flow-comments [-h] [-v] (wrap|unwrap|remove|to-htm) [options] [files...]',
       '',
-      'Options:',
       '  -h, --help       Print this screen and exit with status 1.',
       '  -v, --version    Print version and exit with status 1.',
       '',
@@ -75,6 +69,14 @@ if (options.h) {
       '',
       '[1]: https://github.com/developit/htm/tree/master/packages/babel-plugin-transform-jsx-to-htm',
     ].join('\n'),
+  );
+  //eslint-disable-next-line no-process-exit
+  process.exit(1);
+}
+
+if (!options.command) {
+  console.error(
+    'Usage: flow-comments [-h] [-v] (wrap|unwrap|remove|to-htm) [options] [files...]',
   );
   //eslint-disable-next-line no-process-exit
   process.exit(1);
