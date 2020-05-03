@@ -65,7 +65,7 @@ export function wrapMagicString(
                 ? specifier.start
                 : getStartOfToken(specifiers[index - 1], ',');
           }
-          end = isLast ? specifier.end : getStartOfNode(specifiers[index + 1]);
+          end = isLast ? specifier.end : getStartOfToken(specifier, ',') + 1;
         } else if (!isNaN(start)) {
           wrapInFlowComment(start, end);
           start = NaN;
@@ -120,11 +120,6 @@ export function wrapMagicString(
     const start = source.indexOf(token, endOfTrailingComments);
 
     return start === -1 ? defaultValue : start;
-  }
-  function getStartOfNode(node) {
-    return node.leadingComments && node.leadingComments.length > 0
-      ? node.leadingComments[0].start
-      : node.start;
   }
 
   function generateComment(start, end, optional = false) {
