@@ -174,7 +174,7 @@ module.exports = {
 
     // Stylistic Issues
 
-    'array-bracket-newline': ['error', {multiline: true}],
+    'array-bracket-newline': ['error', "consistent"],
     'array-bracket-spacing': 'error',
     'array-element-newline': 'off',
     'block-spacing': 'error',

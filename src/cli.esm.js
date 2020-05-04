@@ -3,7 +3,7 @@
 import fs from 'fs';
 import minimist from 'minimist';
 import { writeFile, walk } from './utils.js';
-import { processFile, processStdin } from './index.js';
+import { commands, processFile, processStdin } from './index.js';
 
 function getVersion() {
   return JSON.parse(
@@ -13,6 +13,8 @@ function getVersion() {
 
 const {
   _: [command, ...filenames],
+  version: showVersion,
+  help: showHelp,
   ...options
 } = minimist(process.argv.slice(2), {
   alias: {
@@ -21,54 +23,36 @@ const {
   },
 });
 
-switch (command) {
-  case 'wrap':
-  case 'unwrap':
-  case 'remove':
-  case 'to-htm':
-    options.command = command;
-    break;
-  default:
-    options.command = null;
-}
+options.command = commands[command] ? command : null;
 
-if (options.v) {
+if (showVersion) {
   console.error(`v${getVersion()}`);
   //eslint-disable-next-line no-process-exit
   process.exit(0);
 }
-if (options.h) {
+if (showHelp) {
   console.error(
     [
-      'Usage: flow-comments [-h] [-v] (wrap|unwrap|remove|to-htm) [options] [files...]',
-      '',
-      '  -h, --help       Print this screen and exit.',
-      '  -v, --version    Print version and exit.',
-      '',
-      'wrap: Wrap flow type annotations in comments.',
-      '  --[no-]spaceBefore   If set, adds a space before the start of the added comment.',
-      '  --[no-]spaceInside   If set, adds a space arround the type inside the comment.',
-      '',
-      'unwrap: Unwrap flow comments type annotations.',
-      '  --[no-]spaceInside   If set, removes a space from the end of the comment.',
-      '',
-      'remove: Strip flow type annotations (including in comment form).',
-      '  --[no-]spaceInside   If set, removes a space from the end of the comment ones.',
-      '',
-      'to-htm: Converts JSX into Tagged Templates that work with htm (like [1]).',
-      '  --tag=TAG          Sets the "tag" function to prefix [Tagged Templates] with. Default: "html"',
-      '',
-      '  Auto-import the tag (off by default):',
-      '  --no-import        Turn off auto-import.',
-      '  --import=MODULE    Auto-import the "tag" function from MODULE (`import {TAG} from MODULE`).',
-      '  --import.module=MODULE --import.export=EXPORT',
-      '                     Auto-import the "tag" function from MODULE:',
-      '                     if EXPORT == "default", `import TAG from MODULE`',
-      '                     if EXPORT == "*", `import * as TAG from MODULE`',
-      '                     otherwise, `import {EXPORT as TAG} from MODULE`',
-      '',
-      '[1]: https://github.com/developit/htm/tree/master/packages/babel-plugin-transform-jsx-to-htm',
-    ].join('\n'),
+      [
+        `Usage: flow-comments [-h] [-v] (${Object.keys(commands).join(
+          '|',
+        )}) [options] [files...]`,
+        '',
+        '  -h, --help       Print this screen and exit.',
+        '  -v, --version    Print version and exit.',
+      ].join('\n'),
+      ...Object.entries(commands).map(function ([name, { description, help }]) {
+        if (typeof help === 'string') {
+          help = help.split('\n');
+        }
+        help = help
+          .map(function (line) {
+            return `  ${line}`;
+          })
+          .join('\n');
+        return `${name}: ${description}\n${help}`;
+      }),
+    ].join('\n\n'),
   );
   //eslint-disable-next-line no-process-exit
   process.exit(0);
@@ -76,7 +60,9 @@ if (options.h) {
 
 if (!options.command) {
   console.error(
-    'Usage: flow-comments [-h] [-v] (wrap|unwrap|remove|to-htm) [options] [files...]',
+    `Usage: flow-comments [-h] [-v] (${Object.keys(commands).join(
+      '|',
+    )}) [options] [files...]`,
   );
   //eslint-disable-next-line no-process-exit
   process.exit(1);
