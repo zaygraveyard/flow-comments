@@ -2,6 +2,8 @@ import fs from 'fs';
 import test from 'ava';
 import { processSource } from '../src/main.js';
 
+const spaceInside = true;
+
 function readFile(filename) {
   return new Promise(function (resolve, reject) {
     fs.readFile(filename, 'utf8', function (err, code) {
@@ -13,20 +15,19 @@ function readFile(filename) {
     });
   });
 }
+function unwrap(source, options) {
+  return processSource(source, { command: 'unwrap', ...options });
+}
 
 test('string', async (t) => {
-  t.is(
-    await processSource('const a/*: string*/ = 2', { command: 'unwrap' }),
-    'const a: string = 2',
-  );
+  const source = 'const a: string = 2';
+
+  t.is(await unwrap('const a/*: string*/ = 2'), source);
+  t.is(await unwrap('const a/*: string */ = 2', { spaceInside }), source);
 });
 
 test('file', async (t) => {
-  const unwrappedSource = await readFile(`${__dirname}/fixtures/unwrapped.js`);
   const wrappedSource = await readFile(`${__dirname}/fixtures/wrapped.js`);
 
-  t.is(
-    await processSource(wrappedSource, { command: 'unwrap' }),
-    unwrappedSource,
-  );
+  t.snapshot(await unwrap(wrappedSource), 'no space');
 });

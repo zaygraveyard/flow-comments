@@ -1,5 +1,6 @@
 module.exports = {
   rules: {
+    'no-unused-vars': 'warn',
     'arrow-parens': 'off',
     'import/named': 'off',
     'import/default': 'off',
