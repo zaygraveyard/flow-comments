@@ -35,15 +35,15 @@ switch (command) {
 if (options.v) {
   console.error(`v${getVersion()}`);
   //eslint-disable-next-line no-process-exit
-  process.exit(1);
+  process.exit(0);
 }
 if (options.h) {
   console.error(
     [
       'Usage: flow-comments [-h] [-v] (wrap|unwrap|remove|to-htm) [options] [files...]',
       '',
-      '  -h, --help       Print this screen and exit with status 1.',
-      '  -v, --version    Print version and exit with status 1.',
+      '  -h, --help       Print this screen and exit.',
+      '  -v, --version    Print version and exit.',
       '',
       'wrap: Wrap flow type annotations in comments.',
       '  --[no-]spaceBefore   If set, adds a space before the start of the added comment.',
@@ -71,7 +71,7 @@ if (options.h) {
     ].join('\n'),
   );
   //eslint-disable-next-line no-process-exit
-  process.exit(1);
+  process.exit(0);
 }
 
 if (!options.command) {
