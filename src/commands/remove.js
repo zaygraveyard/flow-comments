@@ -4,6 +4,7 @@ import parse from '../parse.js';
 import unwrap from './unwrap.js';
 
 const WHITE_SPACE_REGEX = /\s/;
+const NEW_LINE_REGEX = /[\n\r]+/;
 const NEW_LINE_AT_START_REGEX = /^(\n|\r|(\n\r)|(\r\n))/g;
 const NEW_LINE_AT_END_REGEX = /(\n|\r|(\n\r)|(\r\n))$/;
 
@@ -73,14 +74,19 @@ export function removeMagicString({ source, ast, result }, options = {}) {
           const isLast = index === specifiers.length - 1;
 
           if (isNaN(start)) {
-            start = isFirst
-              ? specifier.start
-              : getStartOfToken(specifiers[index - 1], ',');
+            start =
+              isFirst || !isLast
+                ? specifier.start
+                : getStartOfToken(specifiers[index - 1], ',');
           }
-          end =
-            isFirst && !isLast
-              ? getStartOfNode(specifiers[index + 1])
-              : specifier.end;
+          if (isLast) {
+            end = specifier.end;
+          } else {
+            end = getStartOfNode(specifiers[index + 1]);
+            if (NEW_LINE_REGEX.test(source.substring(start, end))) {
+              end = getStartOfToken(specifier, ',') + 1;
+            }
+          }
         } else if (!isNaN(start)) {
           removeFlow(start, end);
           start = NaN;
