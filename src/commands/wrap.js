@@ -2,6 +2,7 @@ import MagicString from 'magic-string';
 import traverse from '@babel/traverse';
 
 const WHITE_SPACE_REGEX = /\s/;
+const NEW_LINE_REGEX = /[\n\r]+/;
 
 export function wrapMagicString(
   { source, ast, result },
@@ -65,7 +66,14 @@ export function wrapMagicString(
                 ? specifier.start
                 : getStartOfToken(specifiers[index - 1], ',');
           }
-          end = isLast ? specifier.end : getStartOfToken(specifier, ',') + 1;
+          if (isLast) {
+            end = specifier.end;
+          } else {
+            end = getStartOfNode(specifiers[index + 1]);
+            if (NEW_LINE_REGEX.test(source.substring(start, end))) {
+              end = getStartOfToken(specifier, ',') + 1;
+            }
+          }
         } else if (!isNaN(start)) {
           wrapInFlowComment(start, end);
           start = NaN;
@@ -120,6 +128,11 @@ export function wrapMagicString(
     const start = source.indexOf(token, endOfTrailingComments);
 
     return start === -1 ? defaultValue : start;
+  }
+  function getStartOfNode(node) {
+    return node.leadingComments && node.leadingComments.length > 0
+      ? node.leadingComments[0].start
+      : node.start;
   }
 
   function generateComment(start, end, optional = false) {
