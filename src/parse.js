@@ -4,6 +4,11 @@ export default function parseCode(source) {
   return {
     source,
     ast: parse(source, {
+      allowImportExportEverywhere: true,
+      allowAwaitOutsideFunction: true,
+      allowReturnOutsideFunction: true,
+      allowSuperOutsideMethod: true,
+      allowUndeclaredExports: true,
       sourceType: 'unambiguous',
       plugins: [
         'asyncGenerators',
@@ -11,6 +16,7 @@ export default function parseCode(source) {
         'classProperties',
         'classPrivateProperties',
         'classPrivateMethods',
+        // 'decorators',
         'doExpressions',
         'dynamicImport',
         'exportDefaultFrom',
@@ -25,9 +31,12 @@ export default function parseCode(source) {
         'optionalCatchBinding',
         'optionalChaining',
         'partialApplication',
+        // 'pipelineOperator',
         'throwExpressions',
+        'topLevelAwait',
         'flow',
         'jsx',
+        'v8intrinsic',
       ],
     }),
   };
