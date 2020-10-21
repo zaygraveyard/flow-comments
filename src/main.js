@@ -40,6 +40,9 @@ commands['to-htm'] = {
     '[1]: https://github.com/developit/htm/tree/master/packages/babel-plugin-transform-jsx-to-htm',
   ],
 };
+commands['remove-comments'] = {
+  description: 'Strip all comments.',
+};
 
 export async function processSource(source, { command, ...options }) {
   if (typeof command !== 'function') {
