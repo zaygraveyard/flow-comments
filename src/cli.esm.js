@@ -42,6 +42,9 @@ if (showHelp) {
         '  -v, --version    Print version and exit.',
       ].join('\n'),
       ...Object.entries(commands).map(function ([name, { description, help }]) {
+        if (!help) {
+          return `${name}: ${description}`;
+        }
         if (typeof help === 'string') {
           help = help.split('\n');
         }
