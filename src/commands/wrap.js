@@ -49,30 +49,23 @@ export function wrapMagicString(
       if (isTypeImportNode(node) || node.specifiers.length === 0) {
         return;
       }
+
       const specifiers = node.specifiers;
-      const indexOfFirstNonDefaultSpecifier =
-        specifiers[0].type === 'ImportDefaultSpecifier' ? 1 : 0;
       let start = NaN;
       let end;
 
       specifiers.forEach(function (specifier, index) {
         if (isTypeImportNode(specifier)) {
-          const isFirst = index === indexOfFirstNonDefaultSpecifier;
-          const isLast = index === specifiers.length - 1;
-
           if (isNaN(start)) {
-            start =
-              isFirst || !isLast
-                ? specifier.start
-                : getStartOfToken(specifiers[index - 1], ',');
+            start = specifier.start;
           }
-          if (isLast) {
-            end = specifier.end;
-          } else {
+          if (index < specifiers.length - 1) {
             end = getStartOfNode(specifiers[index + 1]);
             if (NEW_LINE_REGEX.test(source.substring(start, end))) {
               end = getStartOfToken(specifier, ',') + 1;
             }
+          } else {
+            end = specifier.end;
           }
         } else if (!isNaN(start)) {
           wrapInFlowComment(start, end);
@@ -80,6 +73,21 @@ export function wrapMagicString(
         }
       });
       if (!isNaN(start)) {
+        const lastSpecifier = specifiers[specifiers.length - 1];
+        const indexOfFollowingComma = getStartOfToken(lastSpecifier, ',');
+        const hasTrailingComma =
+          indexOfFollowingComma !== -1 &&
+          indexOfFollowingComma < getStartOfToken(lastSpecifier, '}');
+
+        if (hasTrailingComma) {
+          end = indexOfFollowingComma + 1;
+        } else {
+          const lastNormalSpecifier = findLast(specifiers, isNormalImportNode);
+
+          if (lastNormalSpecifier) {
+            start = getStartOfToken(lastNormalSpecifier, ',');
+          }
+        }
         wrapInFlowComment(start, end);
       }
 
@@ -168,6 +176,19 @@ export function wrapMagicString(
   }
   function isNormalImportNode(node) {
     return !isTypeImportNode(node);
+  }
+
+  function findLast(array, predicate, thisArg) {
+    let i = array.length;
+
+    while (i--) {
+      const value = array[i];
+
+      if (predicate.call(thisArg, value, i, array)) {
+        return value;
+      }
+    }
+    return undefined;
   }
 }
 

@@ -6,6 +6,13 @@ import {
   CY,
 } from './types';
 
+import {
+  AZ,
+  BZ,
+  /*::type CZ,
+  type DZ,*/
+} from './types';
+
 /*::export type { AE } from './types';*/
 import lib from 'library';
 export { fooE } from 'foo';
@@ -17,6 +24,7 @@ export { fooE } from 'foo';
 
 import A1, { B1, /*::type C1, type D1, */E1 } from './types';
 import F1, { /*::typeof G1, */H1/*::, type I1*/ } from './types';
+import F2, { /*::typeof G2, */H2/*::, type I2, type J2*/ } from './types';
 import { /*::type J1*/ } from './types';
 import K1, { L1, M1 } from './types';
 import './types';

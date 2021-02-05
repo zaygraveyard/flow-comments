@@ -26,6 +26,6 @@ test('file', async (t) => {
   const wrappedSource = await readFile(`${__dirname}/fixtures/wrapped.js`);
   const unwrappedSource = await readFile(`${__dirname}/fixtures/unwrapped.js`);
 
-  t.snapshot(await remove(wrappedSource));
-  t.snapshot(await remove(unwrappedSource));
+  t.snapshot(await remove(wrappedSource), 'remove from wrapped');
+  t.snapshot(await remove(unwrappedSource), 'remove from unwrapped');
 });
