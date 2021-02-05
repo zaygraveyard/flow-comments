@@ -44,21 +44,21 @@ export function writeFile(filename, code) {
   });
 }
 export function readdir(dirname, includeDotfiles, filter) {
-  return readdirRecursive(dirname, function (
-    filename,
-    _index,
-    currentDirectory,
-  ) {
-    const stat = fs.statSync(path.join(currentDirectory, filename));
+  return readdirRecursive(
+    dirname,
+    function (filename, _index, currentDirectory) {
+      const stat = fs.statSync(path.join(currentDirectory, filename));
 
-    if (stat.isDirectory()) {
-      return true;
-    }
+      if (stat.isDirectory()) {
+        return true;
+      }
 
-    return (
-      (includeDotfiles || filename[0] !== '.') && (!filter || filter(filename))
-    );
-  });
+      return (
+        (includeDotfiles || filename[0] !== '.') &&
+        (!filter || filter(filename))
+      );
+    },
+  );
 }
 export async function walk(globs) {
   const filepaths = [];
