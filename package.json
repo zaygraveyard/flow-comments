@@ -1,10 +1,12 @@
 {
   "name": "@ziadkh0/flow-comments",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "A simple CLI that wraps/unwraps flow type annotations in comments",
   "main": "src/index.js",
   "module": "src/main.js",
-  "bin": "src/cli.js",
+  "bin": {
+    "flow-comments": "src/cli.js"
+  },
   "repository": "zaygraveyard/flow-comments",
   "scripts": {
     "lint": "eslint src test",
