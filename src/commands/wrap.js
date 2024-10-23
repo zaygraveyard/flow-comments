@@ -10,7 +10,7 @@ export function wrapMagicString(
 ) {
   const insideSpace = spaceInside ? ' ' : '';
 
-  traverse(ast, {
+  traverse.default(ast, {
     TypeCastExpression(path) {
       wrapPathInFlowComment(path.get('typeAnnotation'));
       path.replaceWith(path.get('expression'));
@@ -131,8 +131,8 @@ export function wrapMagicString(
       node.trailingComments && node.trailingComments.length > 0
         ? node.trailingComments[node.trailingComments.length - 1].end
         : node.name
-        ? node.start + node.name.length
-        : node.end;
+          ? node.start + node.name.length
+          : node.end;
     const start = source.indexOf(token, endOfTrailingComments);
 
     return start === -1 ? defaultValue : start;

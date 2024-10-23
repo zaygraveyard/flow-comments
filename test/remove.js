@@ -2,6 +2,8 @@ import fs from 'fs';
 import test from 'ava';
 import { processSource } from '../src/main.js';
 
+const __dirname = import.meta.dirname;
+
 function readFile(filename) {
   return new Promise(function (resolve, reject) {
     fs.readFile(filename, 'utf8', function (err, code) {

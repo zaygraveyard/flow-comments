@@ -12,7 +12,7 @@ export function toHTMMagicString(
   let foundJSXElement = false;
   let remainingExpressions = [];
 
-  traverse(ast, {
+  traverse.default(ast, {
     Program: {
       exit(path) {
         if (

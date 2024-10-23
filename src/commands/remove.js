@@ -15,7 +15,7 @@ export function removeMagicString({ source, ast, result }, options = {}) {
   source = unwrap({ source, ast }, options);
   ast = parse(source).ast;
   result = new MagicString(source);
-  traverse(ast, {
+  traverse.default(ast, {
     TypeCastExpression(path) {
       removeFlowAtPath(path.get('typeAnnotation'));
       path.replaceWith(path.get('expression'));
@@ -144,8 +144,8 @@ export function removeMagicString({ source, ast, result }, options = {}) {
       node.trailingComments && node.trailingComments.length > 0
         ? node.trailingComments[node.trailingComments.length - 1].end
         : node.name
-        ? node.start + node.name.length
-        : node.end;
+          ? node.start + node.name.length
+          : node.end;
     const start = source.indexOf(token, endOfTrailingComments);
 
     return start === -1 ? defaultValue : start;

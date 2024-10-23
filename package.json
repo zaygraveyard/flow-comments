@@ -2,15 +2,16 @@
   "name": "@ziadkh0/flow-comments",
   "version": "0.4.7",
   "description": "A simple CLI that wraps/unwraps flow type annotations in comments",
-  "main": "src/index.js",
+  "type": "module",
+  "main": "src/index.cjs",
   "module": "src/main.js",
   "bin": {
     "flow-comments": "src/cli.js"
   },
   "repository": "zaygraveyard/flow-comments",
   "scripts": {
-    "lint": "eslint src test",
-    "fmt": "eslint src test --fix",
+    "lint": "eslint",
+    "fmt": "eslint --fix",
     "pretest": "npm run -s lint",
     "test": "(npm run -s test:ava && npm run -s test:cli && npm run -s finallytest) || (npm run -s finallytest; false)",
     "test:ava": "ava",
@@ -30,9 +31,6 @@
     "files": [
       "test/**/*",
       "!test/fixtures"
-    ],
-    "require": [
-      "esm"
     ]
   },
   "keywords": [
@@ -54,12 +52,11 @@
     "minimist": "^1.2.5"
   },
   "devDependencies": {
-    "@getify/eslint-plugin-proper-arrows": "^10.0.0",
-    "ava": "^3.15.0",
-    "eslint": "^7.19.0",
-    "eslint-config-prettier": "^7.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "prettier": "^2.2.1"
+    "ava": "^6.1.3",
+    "eslint": "^9.13.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3"
   }
 }

@@ -2,6 +2,7 @@ import fs from 'fs';
 import test from 'ava';
 import { processSource } from '../src/main.js';
 
+const __dirname = import.meta.dirname;
 const spaceInside = true;
 
 function readFile(filename) {
