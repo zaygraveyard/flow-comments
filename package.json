@@ -42,13 +42,13 @@
   "author": "Ziad EL KHOURY HANNA",
   "license": "MIT",
   "dependencies": {
-    "@babel/parser": "^7.12.15",
-    "@babel/traverse": "^7.12.13",
-    "@babel/types": "^7.12.13",
+    "@babel/parser": "^7.25.9",
+    "@babel/traverse": "^7.25.9",
+    "@babel/types": "^7.25.9",
     "esm": "^3.2.25",
     "fast-glob": "^3.2.5",
     "fs-readdir-recursive": "^1.1.0",
-    "magic-string": "^0.25.7",
+    "magic-string": "^0.30.12",
     "minimist": "^1.2.5"
   },
   "devDependencies": {
